@@ -1,2 +1,7 @@
+private.properties
+project.properties
+genfiles.properties
+config.properties
+built-jar.properties
 line 6.properties
 io.properties
