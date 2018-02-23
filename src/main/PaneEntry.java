@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -35,6 +36,7 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
     private final Color initial_background_color;
     private SpecsFile specsFile;
     private Properties specsProps;
+    private JComponent valueComponent;
 
     public PaneEntry(LayoutManager layoutManager) {
         super(layoutManager);
@@ -47,11 +49,15 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
     }
 
     public String get_value() {
-        if (toggle_btn != null) {
+        if (valueComponent instanceof JToggleButton) {
             return toggle_btn.getText();
+        } else if (valueComponent instanceof JComboBox) {
+            JComboBox jbox = (JComboBox) valueComponent;
+            return (String) jbox.getSelectedItem();
         } else {
             return value_textfield.getText().trim();
         }
+
     }
 
     public void setSpecsFile(SpecsFile specsFile) {
@@ -79,7 +85,7 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
             toggle_btn.setBorder(BorderFactory.createLineBorder(Color.gray));
             toggle_btn.addActionListener(this);
             toggle_btn.addMouseListener(this);
-            add(toggle_btn);
+            addValueComponent(toggle_btn);
         } else if (specsFile != null && specsFile.exist()) {
 //            System.out.println("YEAH: " + specsFile.getPath());
             specsExistCurrKey();
@@ -87,10 +93,15 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
             else_();
         }
     }
+    
+    private void addValueComponent(JComponent component){
+        this.valueComponent = component;
+        add(component);
+    }
 
     private void else_() {
         value_textfield.addMouseListener(this);
-        add(value_textfield);
+        addValueComponent(value_textfield);
     }
 
     private void specsExistCurrKey() {
@@ -105,11 +116,11 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
             //
             jbox = HelpM.fillComboBoxNoAutoFill(jbox, arr, get_value());
             //
-            jbox.setEditable(true);
+//            jbox.setEditable(true);
             //
             jbox.addMouseListener(this);
             //
-            add(jbox);
+            addValueComponent(jbox);
             //
         } else {
             else_();
