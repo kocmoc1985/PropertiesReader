@@ -9,14 +9,18 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 
 /**
@@ -150,5 +154,31 @@ public class HelpM {
         } catch (InterruptedException ex) {
             Logger.getLogger(HelpM.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public static boolean fileExist(String path) {
+        File f = new File(path);
+        return f.exists();
+    }
+    
+    public static JComboBox fillComboBoxNoAutoFill(JComboBox jbox, Object[] values, Object initialValue) {
+        //
+        ArrayList<Object> list = new ArrayList<Object>();
+        //
+        if (initialValue != null) {
+            list.add(initialValue);
+        }
+        //
+        list.addAll(Arrays.asList(values));
+        //
+        Object[] arr = list.toArray();
+        //
+        jbox.removeAllItems();
+        //
+        jbox.setModel(new DefaultComboBoxModel(arr));
+        //
+        jbox.setSelectedIndex(0);
+        //
+        return jbox;
     }
 }

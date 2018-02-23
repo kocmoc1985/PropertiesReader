@@ -11,12 +11,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Properties;
 import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.Border;
+import supplementary.HelpM;
+import supplementary.SpecsFile;
 
 /**
  *
@@ -29,6 +33,8 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
     private JToggleButton toggle_btn;
     private final Border initial_border;
     private final Color initial_background_color;
+    private SpecsFile specsFile;
+    private Properties specsProps;
 
     public PaneEntry(LayoutManager layoutManager) {
         super(layoutManager);
@@ -46,7 +52,16 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
         } else {
             return value_textfield.getText().trim();
         }
+    }
 
+    public void setSpecsFile(SpecsFile specsFile) {
+        //
+        this.specsFile = specsFile;
+        //
+        if (specsFile != null && specsFile.exist()) {
+            specsProps = HelpM.properties_load_properties(specsFile.getPath(), false);
+        }
+        //
     }
 
     public void add_key_label_component(Component c) {
@@ -56,18 +71,50 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
     }
 
     public void add_value_textfield_component(Component c) {
+        //
         value_textfield = (JTextField) c;
+        //
         if (get_value().equals("true") || get_value().equals("false")) {
             toggle_btn = new JToggleButton(get_value());
             toggle_btn.setBorder(BorderFactory.createLineBorder(Color.gray));
             toggle_btn.addActionListener(this);
             toggle_btn.addMouseListener(this);
             add(toggle_btn);
+        } else if (specsFile != null && specsFile.exist()) {
+//            System.out.println("YEAH: " + specsFile.getPath());
+            specsExistCurrKey();
         } else {
-            value_textfield.addMouseListener(this);
-            add(c);
+            else_();
         }
+    }
 
+    private void else_() {
+        value_textfield.addMouseListener(this);
+        add(value_textfield);
+    }
+
+    private void specsExistCurrKey() {
+        //
+        JComboBox jbox = new JComboBox();
+        //
+        String str = specsProps.getProperty(get_key());
+        //
+        if (str != null) {
+            //
+            String[] arr = str.split(";");
+            //
+            jbox = HelpM.fillComboBoxNoAutoFill(jbox, arr, get_value());
+            //
+            jbox.setEditable(true);
+            //
+            jbox.addMouseListener(this);
+            //
+            add(jbox);
+            //
+        } else {
+            else_();
+        }
+        //
     }
 
     @Override
@@ -83,17 +130,14 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent me) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent me) {
-
     }
 
     @Override
     public void mouseReleased(MouseEvent me) {
-
     }
 
     @Override

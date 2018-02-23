@@ -31,6 +31,7 @@ import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import supplementary.GP;
 import supplementary.HelpM;
+import supplementary.SpecsFile;
 
 /**
  *
@@ -157,12 +158,16 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
     private void build_tabbed_pane() {
         for (String property_path : property_files_list) {
             File f = new File(property_path);
+
             JScrollPane jsp = new JScrollPane(create_pane(property_path));
             jsp.setHorizontalScrollBar(null);
-            tabbed_pane.addTab(f.getName(), new JScrollPane(create_pane(property_path)));//create_pane(property_path)
+            tabbed_pane.addTab(f.getName(), jsp);//create_pane(property_path)
         }
+        //
         tabbed_pane_container.add(tabbed_pane);
     }
+
+    
 
     /**
      * Create "pane" for the "JTabbedPane"
@@ -171,24 +176,25 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
      * @return
      */
     private JPanel create_pane(String property_path) {
+        //
         Pane pane = new Pane(property_path);
-
+        //
         ArrayList<String> properties_list = HelpM.properties_load_properties_to_arraylist(property_path);
-
+        //
         GridLayout gridLayout;
         if (properties_list.isEmpty() == false) {
             gridLayout = new GridLayout(properties_list.size(), 0);
         } else {
             gridLayout = new GridLayout(1, 0);
         }
-
+        //
         pane.setLayout(gridLayout);
-
+        //
         for (String property : properties_list) {
             String[] arr = property.split("#");
             String key;
             String value;
-
+            //
             if (arr.length == 1) {
                 key = arr[0];
                 value = "";
@@ -196,21 +202,45 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
                 key = arr[0];
                 value = arr[1];
             }
-
+            //
             PaneEntry one_entry_container = new PaneEntry(new GridLayout(1, 2));
-
+            //
             JLabel key_label = new JLabel("   " + key);
             key_label.setBorder(BorderFactory.createLineBorder(Color.black));
             JTextField value_text_field = new JTextField(value);
-
+            //
+            //
+            SpecsFile specsFile = check_if_specs_file_exist(property_path);
+            //
+            one_entry_container.setSpecsFile(specsFile);
+            //
             one_entry_container.add_key_label_component(key_label);
             one_entry_container.add_value_textfield_component(value_text_field);
-
+            //
             pane.add_pane_entry(one_entry_container);
+            //
         }
-
+        //
         pane_list.add(pane);
         return pane;
+        //
+    }
+    
+    private SpecsFile check_if_specs_file_exist(String path) {
+        //
+        File f = new File(path);
+        //
+        String fileNameWithExt = f.getAbsoluteFile().getName();
+        //
+        String[] arr = fileNameWithExt.split("\\.");
+        //
+        String specFile = f.getParent() + "\\" + arr[0] + "$." + arr[1];
+        //
+        if (HelpM.fileExist(specFile)) {
+            return new SpecsFile(true, specFile);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -223,7 +253,7 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
         for (File file : f) {
             if (file.isDirectory()) {
                 find_properties(file.getPath());
-            } else if (file.getName().contains(GP.REGEX_PROPERTY)) {
+            } else if (file.getName().contains(GP.PROPS_PATTERN) && file.getName().contains(GP.SPEC_PATTERN) == false) {
                 if (skip(file.getName()) == false) {
                     property_files_list.add(file.getPath());
                     absolute_path_map.put(file.getPath(), file.getAbsolutePath());
