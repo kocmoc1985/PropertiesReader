@@ -40,17 +40,20 @@ public class Pane extends JPanel {
     }
 
     public void save_properties() {
+        //
         ArrayList<String> properties_list = new ArrayList<String>();
-
+        //
         for (PaneEntry paneEntry : pane_entry_list) {
             String key = paneEntry.get_key();
             String value = paneEntry.get_value();
             properties_list.add(properties_list.size(), key + "#" + value);
         }
+        //
         try {
             HelpM.properties_save_properties_manual(properties_list, property_path);
         } catch (IOException ex) {
             Logger.getLogger(Pane.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //
     }
 }

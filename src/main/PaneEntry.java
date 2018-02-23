@@ -20,8 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.Border;
+import supplementary.GP;
 import supplementary.HelpM;
 import supplementary.SpecsFile;
+import supplementary.TextFieldCheck;
 
 /**
  *
@@ -93,8 +95,8 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
             else_();
         }
     }
-    
-    private void addValueComponent(JComponent component){
+
+    private void addValueComponent(JComponent component) {
         this.valueComponent = component;
         add(component);
     }
@@ -110,7 +112,7 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
         //
         String str = specsProps.getProperty(get_key());
         //
-        if (str != null) {
+        if (str != null && str.contains(GP.SPEC_PATTERN) == false) {
             //
             String[] arr = str.split(";");
             //
@@ -121,6 +123,14 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
             jbox.addMouseListener(this);
             //
             addValueComponent(jbox);
+            //
+        } else if (str != null && str.contains(GP.SPEC_PATTERN)) {
+            //
+            TextFieldCheck textFieldCheck = new TextFieldCheck(get_value(),str.split(";")[1], 10);
+            //
+            textFieldCheck.addMouseListener(this);
+            //
+            addValueComponent(textFieldCheck);
             //
         } else {
             else_();
