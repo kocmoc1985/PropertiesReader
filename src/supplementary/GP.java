@@ -16,5 +16,6 @@ public class GP {
     public static final String PROPS_PATTERN = ".properties";
     public static final ArrayList<String> PROPERTIES_TO_SKIP = HelpM.read_Txt_To_ArrayList("pr_skip.list", "#");
     public static final String SPEC_PATTERN = "$";
-    
+    public static final String REGEX_PATTERN = "$";
+    public static final String FIXED_VALUE_PATTERN = "%";
 }

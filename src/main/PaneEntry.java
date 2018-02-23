@@ -56,6 +56,9 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
         } else if (valueComponent instanceof JComboBox) {
             JComboBox jbox = (JComboBox) valueComponent;
             return (String) jbox.getSelectedItem();
+        } else if (valueComponent instanceof TextFieldCheck) {
+            TextFieldCheck fieldCheck = (TextFieldCheck) valueComponent;
+            return fieldCheck.getText();
         } else {
             return value_textfield.getText().trim();
         }
@@ -112,7 +115,7 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
         //
         String str = specsProps.getProperty(get_key());
         //
-        if (str != null && str.contains(GP.SPEC_PATTERN) == false) {
+        if (str != null && str.contains(GP.REGEX_PATTERN) == false && str.contains(GP.FIXED_VALUE_PATTERN) == false) {
             //
             String[] arr = str.split(";");
             //
@@ -124,14 +127,17 @@ public class PaneEntry extends JPanel implements ActionListener, MouseListener {
             //
             addValueComponent(jbox);
             //
-        } else if (str != null && str.contains(GP.SPEC_PATTERN)) {
+        } else if (str != null && str.contains(GP.REGEX_PATTERN)) {
             //
-            TextFieldCheck textFieldCheck = new TextFieldCheck(get_value(),str.split(";")[1], 10);
+            TextFieldCheck textFieldCheck = new TextFieldCheck(get_value(), str.split(";")[1], 10);
             //
             textFieldCheck.addMouseListener(this);
             //
             addValueComponent(textFieldCheck);
             //
+        } else if (str != null && str.contains(GP.FIXED_VALUE_PATTERN)) {
+            value_textfield.setEditable(false);
+            else_();
         } else {
             else_();
         }

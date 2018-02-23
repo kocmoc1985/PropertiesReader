@@ -1,0 +1,13 @@
+To make Specification file for a property file ex: "main.properties" make a "specification" file
+named main$.properties.
+
+
+#SPECIFY ALTERNATIVES
+port=1111;2222;9999;5555
+
+#SPECIFY - NONE CHANGABLE VALUE
+folder_on_server_to_take_from=%
+
+#SPECIFY REGEX TO CHECK AGAINST
+host=$;(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)
+

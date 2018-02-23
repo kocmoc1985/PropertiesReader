@@ -5,13 +5,8 @@
 package supplementary;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -62,15 +57,12 @@ public class TextFieldCheck extends JTextField implements KeyListener {
     public String getText() {
         if (RESULT == OK_RESULT) {
             return super.getText();
-        } else if (RESULT == ALREADY_EXIST_RESULT) {
-            JOptionPane.showMessageDialog(null, "Exist already");
-            return null;
-        } else if (RESULT == WRONG_FORMAT_RESULT) {
-            JOptionPane.showMessageDialog(null, "Wrong format");
-            return null;
+        }else if (RESULT == WRONG_FORMAT_RESULT && getText_().length() > 0) {
+            JOptionPane.showMessageDialog(null, "Wrong format: " + getText_());
+            return "";
         }
         //
-        return null;
+        return "";
 
     }
 
