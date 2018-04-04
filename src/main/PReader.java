@@ -234,7 +234,13 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
         //
         String[] arr = fileNameWithExt.split("\\.");
         //
-        String specFile = f.getParent() + "\\" + arr[0] + "$." + arr[1];
+        String specFile = "";
+        //
+        if(arr.length == 2){
+            specFile = f.getParent() + "\\" + arr[0] + "$." + arr[1];
+        }else if(arr.length == 3){
+            specFile = f.getParent() + "\\" + arr[0] + "." + arr[1] + "$." + arr[2];
+        }
         //
         if (HelpM.fileExist(specFile)) {
             return new SpecsFile(true, specFile);
