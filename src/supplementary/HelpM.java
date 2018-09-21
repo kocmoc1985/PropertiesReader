@@ -186,7 +186,11 @@ public class HelpM {
                 continue;
             }
             //
-            if (str.regionMatches(0, initialValue, 0, initialValue.length())) {
+//            if (str.regionMatches(0, initialValue, 0, initialValue.length())) {
+//                jbox.setSelectedIndex(i);
+//            }
+            //
+            if (str.equals(initialValue)) {
                 jbox.setSelectedIndex(i);
             }
         }
