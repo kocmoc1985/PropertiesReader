@@ -7,6 +7,8 @@ package supplementary;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -16,7 +18,7 @@ import javax.swing.JTextField;
  */
 public class TextFieldCheck extends JTextField implements KeyListener {
 
-    private String regex;
+    private Pattern pattern;
 //    private final Font FONT_1 = new Font("Arial", Font.BOLD, 16);
     public static int OK_RESULT = 0;
     public static int WRONG_FORMAT_RESULT = 1;
@@ -24,17 +26,18 @@ public class TextFieldCheck extends JTextField implements KeyListener {
     public int RESULT;
 
     public TextFieldCheck(String regex, int columns) {
-        this.regex = regex;
         if (columns > 0) {
             setColumns(columns);
         }
         initOther();
     }
-    public TextFieldCheck(String text,String regex, int columns) {
+
+    public TextFieldCheck(String text, String regex, int columns) {
         //
         setText(text);
         //
-        this.regex = regex;
+        this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE); //!!!!!! CASE_INSENSITIVE
+        //
         if (columns > 0) {
             setColumns(columns);
         }
@@ -42,7 +45,6 @@ public class TextFieldCheck extends JTextField implements KeyListener {
         //
         check();
     }
-    
 
     public int getRESULT() {
         return RESULT;
@@ -57,7 +59,7 @@ public class TextFieldCheck extends JTextField implements KeyListener {
     public String getText() {
         if (RESULT == OK_RESULT) {
             return super.getText();
-        }else if (RESULT == WRONG_FORMAT_RESULT && getText_().length() > 0) {
+        } else if (RESULT == WRONG_FORMAT_RESULT && getText_().length() > 0) {
             JOptionPane.showMessageDialog(null, "Wrong format: " + getText_());
             return "";
         }
@@ -72,16 +74,21 @@ public class TextFieldCheck extends JTextField implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent ke) {
-       check();
+        check();
     }
-    
-    private void check(){
-         //
+
+    private boolean validate(Pattern pattern, String stringToCheck) {
+        Matcher matcher = pattern.matcher(stringToCheck);
+        return matcher.find();
+    }
+
+    private void check() {
+        //
         String str = getText_();
         //
-        if (str.matches(regex)) {
+        if (validate(pattern, str)) {
             //
-            setForeground(new Color(34,139,34));
+            setForeground(new Color(34, 139, 34));
             RESULT = OK_RESULT;
             //
         } else {
