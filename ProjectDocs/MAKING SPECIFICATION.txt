@@ -8,6 +8,6 @@ port=1111;2222;9999;5555
 #SPECIFY - NONE CHANGABLE VALUE
 folder_on_server_to_take_from=%
 
-#SPECIFY REGEX TO CHECK AGAINST - "$" IS THE REGEX PATTERN 
+#SPECIFY REGEX TO CHECK AGAINST - "$" IS THE REGEX PATTERN -> SO YOU MUST START WITH "$;"
 host=$;(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)
 

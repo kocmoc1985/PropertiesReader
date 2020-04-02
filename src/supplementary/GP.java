@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Administrator
  */
 public class GP {
-    public static final URL IMAGE_ICON_URL = GP.class.getResource("images/icon.jpg");
+    public static final URL IMAGE_ICON_URL = GP.class.getResource("images/icon.png");
     public static final String PROPS_PATTERN = ".properties";
     public static final ArrayList<String> PROPERTIES_TO_SKIP = HelpM.read_Txt_To_ArrayList("pr_skip.list", "#");
     public static final String SPEC_PATTERN = "$";
