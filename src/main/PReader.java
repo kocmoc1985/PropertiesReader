@@ -32,6 +32,7 @@ import javax.swing.UIManager;
 import supplementary.GP;
 import supplementary.HelpM;
 import supplementary.SpecsFile;
+import udp.Client_UDP;
 
 /**
  *
@@ -39,14 +40,15 @@ import supplementary.SpecsFile;
  */
 public class PReader extends JFrame implements ActionListener, ComponentListener {
 
-    private ArrayList<String> property_files_list = new ArrayList<String>();
-    private ArrayList<Pane> pane_list = new ArrayList<Pane>();
-    private HashMap<String, String> absolute_path_map = new HashMap<String, String>();
+    private final ArrayList<String> property_files_list = new ArrayList<String>();
+    private final ArrayList<Pane> pane_list = new ArrayList<Pane>();
+    private final HashMap<String, String> absolute_path_map = new HashMap<String, String>();
     //==========================
-    private JTabbedPane tabbed_pane = new JTabbedPane();
-    private JPanel tabbed_pane_container = new JPanel(new BorderLayout());
-    private JButton save_btn = new JButton("<html><span style='text-shadow: 2px 2px #000000;'>save</span></html>");
-    private Font save_btn_font = new Font("Arial", Font.PLAIN, 24);
+    private final JTabbedPane tabbed_pane = new JTabbedPane();
+    private final JPanel tabbed_pane_container = new JPanel(new BorderLayout());
+    private final JButton save_btn = new JButton("<html><span style='text-shadow: 2px 2px #000000;'>save</span></html>");
+    private final Font save_btn_font = new Font("Arial", Font.PLAIN, 24);
+    private Client_UDP client_UDP;
 
     public PReader() {
         go();
@@ -82,9 +84,14 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
     }
 
     private void go() {
+        startUdpClient();//[2020-04-07]
         find_properties(".");//find_properties(".");
         build_tabbed_pane();
         build_jframe();
+    }
+    
+    private void startUdpClient(){
+        client_UDP = new Client_UDP("localhost", 65534);
     }
 
     private void save() {
@@ -280,6 +287,7 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == save_btn) {
+            client_UDP.prepareAndSendDatagram("#npms_restart#");
             save();
             tabbed_pane_container.setBorder(BorderFactory.createLineBorder(Color.green, 2));
         }
