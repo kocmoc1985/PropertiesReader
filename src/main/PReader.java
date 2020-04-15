@@ -105,20 +105,21 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
         calculate_jframe_size();
         this.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Properties Reader");
+        this.setTitle("Settings");
         this.setIconImage(new ImageIcon(GP.IMAGE_ICON_URL).getImage());
         this.addComponentListener(this);
-
+        //
         save_btn.addActionListener(this);
         save_btn.setFont(save_btn_font);
-
+        //
         calculate_components_size();
-
+        //
         this.add(tabbed_pane_container);
         this.add(save_btn);
-
+        //
         this.setLocation(HelpM.position_window_in_center_of_the_screen(this));
         this.setVisible(true);
+        //
     }
 
     private void calculate_jframe_size() {
@@ -165,10 +166,11 @@ public class PReader extends JFrame implements ActionListener, ComponentListener
     private void build_tabbed_pane() {
         for (String property_path : property_files_list) {
             File f = new File(property_path);
-
+            //
             JScrollPane jsp = new JScrollPane(create_pane(property_path));
             jsp.setHorizontalScrollBar(null);
             tabbed_pane.addTab(f.getName(), jsp);//create_pane(property_path)
+            //
         }
         //
         tabbed_pane_container.add(tabbed_pane);
